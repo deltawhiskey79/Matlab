@@ -18,7 +18,7 @@ x = r * cos(theta*pi/180);
 y = r * sin(theta*pi/180);
 
 %
-% Ellipse orbit track
+% Elliptic orbit track
 %
 a = 8; % semimajor axis
 b = 3; % semiminor axis
