@@ -25,8 +25,8 @@ b = 3; % semiminor axis
 c = sqrt(a^2 - b^2); % focal
 e = sqrt(1 - b^2/a^2); % eccentricity
 l = a*(1 - e^2); % latus rectum
-r1 = l ./ (1 + e*cos(theta*pi/180));
-x1 = r1 .* cos(theta*pi/180) + c; % puts the ellipse at the center
+r1 = l ./ (1 - e*cos(theta*pi/180));
+x1 = r1 .* cos(theta*pi/180) - c; % puts the ellipse at the center
 y1 = r1 .* sin(theta*pi/180);
 
 % Simulation data of circual orbit 

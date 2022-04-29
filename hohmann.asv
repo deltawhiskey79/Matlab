@@ -1,0 +1,31 @@
+%
+% Hohmann Transfer Orbit
+%
+
+%
+% General Parameters
+%
+dt = 0.1;
+T = 20; % period of circular motion
+t = 0:dt:T; % simulation duration
+ar = 10; % parking orbit radius
+u = 1.327; % u (x10^23)
+
+%
+% Orbital Track
+%
+% Basically all orbits follow elliptical track instead of circular
+%
+e = 0.0
+ap = 50; % apogee point from earth
+a = (ap + ar)/2; % semi major axis
+
+
+%
+% Parking orbit
+%
+vo = sqrt(u/r); % parking orbit velocity
+
+va = sqrt(u*(2/r - 1/a)); % vis viva equation
+
+
