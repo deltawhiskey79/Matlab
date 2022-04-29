@@ -8,7 +8,7 @@ t = 0:dt:T; % simulation duration
 mPos = zeros(2, size(t,2));
 mPos(:,1) = [r; 0]; % initial position of circular orbit object 
 ePos = zeros(2, size(t,2));
-ePos(:,1) = [a; 0]; % initial position of elliptic orbit object
+ePos(:,1) = [r; 0]; % initial position of elliptic orbit object
 
 %
 % Circular orbit track
@@ -58,7 +58,7 @@ axis equal;
 figure(2)
 h2 = plot(ePos(1, 1), ePos(1, 2), 'ob');hold on;
 plot(x1,y1,'--r');
-plot(-c,0, 'Ob');
+plot(-c,0, 'Or');
 for i = 1:length(ePos)
     axis equal;
     set(h2, 'XData', ePos(1,i)+c, 'Ydata', ePos(2,i));
