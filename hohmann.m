@@ -12,10 +12,10 @@ M = 5.9722*10^24; % earth's mass
 %t = 0:dt:T; % simulation duration steps
 er = 6.371*10^6; % earth's radius 
 ar = 2.042*10^6 + er; % parking orbit radius (LEO)
-ae = 3.63229*10^8; % perigee distance
-ap = 4.054*10^8; % apogee (earth-moon distance)
+ae = 3.63229*10^8; % perigee distance (earth-moon)
+ap = 4.054*10^8; % apogee distance (earth-moon)
 a = (ae + ap)/2; % semi major axis of moon's orbit
-u = G*M; % u Gravity constant (earth-moon) in km unit
+u = G*M; % u Gravity constant (earth-moon) unit
 theta = 0:0.1:360; % one full circle angle @ 0.1 deg
 
 %
@@ -30,7 +30,7 @@ lr = b^2/a; % semi-latus rectum or explorer's orbit
 r = lr ./ (1 - e*cos(theta*pi/180)); % plotting orbital track
 Tm = 2*pi*sqrt(a^3/u); % moon-earth orbit period
 dtm = 100; % every time slice is stepped by 100 as the least denominator
-tm = 1:dtm:Tm;
+tm = Tm*0.98:dtm:Tm; % deliberately set in order to match the orbiter's arrival
 mPos = zeros(2, length(tm)); % moon's orbit track data
 for i = 1:length(tm)
     mPos(:, i) = (lr ./ (1 - e*cos(2*pi*tm(i)/Tm))) .* [cos(2*pi*tm(i)/Tm); sin(2*pi*tm(i)/Tm)];
@@ -55,10 +55,19 @@ end
 %
 % velocity at apogee
 %
-va = sqrt(u*(2/ar - 1/a)); % vis viva equation
-lm = 2*a*ap/(a+ap); % semi-lactus rectum of orbiter-earth orbit
-
-
+va = sqrt(u*(2/ar - 1/ap)); % vis viva equation
+ao = (ar+ap)/2; % semi-major axis of orbiter
+lo = 2*ar*ap/(ap+ar); % semi-latus rectum of orbiter-earth orbit
+eo = (ap-ar)/(ap+ar); % orbiter orbit eccentricity
+ro = lo ./ (1 - eo*cos(theta*pi/180)); % Orbiter transfer orbit track
+To = 2*pi*sqrt(ao^3/u); % Orbiter orbit period
+dto = 900;
+to = To/2:dto:To;
+oPos = zeros(2, length(dto));
+%oPos(:,1) = [c-ar; 0];
+for i = 1:length(to)
+   oPos(:,i) = (lo ./ (1 + eo*cos(2*pi*to(i)/To))) .* [cos(2*pi*to(i)/To); sin(2*pi*to(i)/To)];
+end
 
 %
 % plot all
@@ -68,24 +77,33 @@ xo = r .* cos(theta*pi/180)-c; % X axis (elliptic)
 yo = r .* sin(theta*pi/180); % Y axis (elliptic)
 xe = ar * cos(theta*pi/180)-c; % X axis (parking orbit)
 ye = ar * sin(theta*pi/180); % Y axis (parking orbit)
+xm = ro .* cos(theta*pi/180)-c; % X axis (orbiter)
+ym = ro .* sin(theta*pi/180); % Y axis (orbiter)
 plot(xo, yo, '--r'); hold on; % plot track
 plot(xe, ye, '--b');
+plot(xm, ym, '--bl');
 plot(-c, 0 , 'Or');
 labels = {'earth'};
 text(-c, 0, labels, 'VerticalAlignment','bottom','HorizontalAlignment','right');
-h1 = plot(pPos(1,1), pPos(1,2), 'xb'); hold on;
+  %h1 = plot(pPos(1,1), pPos(1,2), 'xb'); hold on;
 h2 = plot(mPos(1,1), mPos(1,2), 'ob');
+h3 = plot(oPos(1,1), oPos(1,2), 'xb'); 
+% for i = 1:length(oPos)
+%    set(h3, 'XData', oPos(1,i)+ap-(ar+c), 'YData', oPos(2,i));
+%    pause(0.05);
+% end
 k = 1; j = 1; % index of loop
 while k < length(tm)
 %    axis equal;
-   if j == length(pPos)
-      j = 1; 
-   end
-   set(h1, 'XData', pPos(1,j)-c, 'YData', pPos(2,j));
-   set(h2, 'XData', mPos(1,k)-c, 'YData', mPos(2,k));
-   pause(0.05);
-   j = j + 1;
-   k = k + 1;
+ if j == length(pPos)
+    j = 1; 
+ end
+ %set(h1, 'XData', pPos(1,j)-c, 'YData', pPos(2,j));
+ set(h2, 'XData', mPos(1,k)-c, 'YData', mPos(2,k));
+ set(h3, 'XData', oPos(1,k)+ap-(ar+c), 'YData', oPos(2,k));
+pause(0.05);
+ j = j + 1;
+ k = k + 1;
 end
 
 
