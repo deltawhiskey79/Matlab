@@ -62,10 +62,10 @@ eo = (ap-ar)/(ap+ar); % orbiter orbit eccentricity
 ro = lo ./ (1 - eo*cos(theta*pi/180)); % Orbiter transfer orbit track
 To = 2*pi*sqrt(ao^3/u); % Orbiter orbit period
 dto = 900;
-to = To/2:dto:To;
-oPos = zeros(2, length(dto));
+to = To/2:dto:To; % Assuming the orbiter executes the TLI at perigee
+oPos = zeros(2, length(dto)); % Orbiter's track data
 %oPos(:,1) = [c-ar; 0];
-for i = 1:length(to)
+for i = 1:length(to) % Plotting orbiter's track to intercept the moon
    oPos(:,i) = (lo ./ (1 + eo*cos(2*pi*to(i)/To))) .* [cos(2*pi*to(i)/To); sin(2*pi*to(i)/To)];
 end
 
@@ -73,6 +73,7 @@ end
 % plot all
 %
 figure(1);
+
 xo = r .* cos(theta*pi/180)-c; % X axis (elliptic)
 yo = r .* sin(theta*pi/180); % Y axis (elliptic)
 xe = ar * cos(theta*pi/180)-c; % X axis (parking orbit)
@@ -84,6 +85,7 @@ plot(xe, ye, '--b');
 plot(xm, ym, '--bl');
 plot(-c, 0 , 'Or');
 labels = {'earth'};
+title('Hohmann Transfer Orbit (earth-moon)');
 text(-c, 0, labels, 'VerticalAlignment','bottom','HorizontalAlignment','right');
   %h1 = plot(pPos(1,1), pPos(1,2), 'xb'); hold on;
 h2 = plot(mPos(1,1), mPos(1,2), 'ob');
