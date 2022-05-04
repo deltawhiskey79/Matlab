@@ -110,5 +110,8 @@ end
 
 
 %
-% Created by: Dimas Widyasastrena @2022
+% Created by: Dimas Widyasastrena, 4th May 2022
+%
+% "I'm not a genius, no ... seriously; it's just Allah Azza wa Jalla made it easy for
+% me"
 %
